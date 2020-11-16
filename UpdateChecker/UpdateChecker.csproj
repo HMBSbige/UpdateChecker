@@ -16,4 +16,8 @@
       <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="5.0.0" Condition=" '$(TargetFramework)' == 'netstandard2.0' " />
+  </ItemGroup>
+
 </Project>
