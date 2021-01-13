@@ -11,6 +11,8 @@
       <PackageTags>UpdateChecker</PackageTags>
       <Version>5.0.1</Version>
       <Copyright>Copyright © 2020 - 2021 HMBSbige</Copyright>
+      <NoWarn>CS1591</NoWarn>
+      <GenerateDocumentationFile>true</GenerateDocumentationFile>
       <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
       <PackageId>HMBSbige.UpdateChecker</PackageId>
       <PackageLicenseExpression>MIT</PackageLicenseExpression>
