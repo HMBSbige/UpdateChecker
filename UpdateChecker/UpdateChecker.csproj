@@ -10,7 +10,7 @@
       <PackageProjectUrl>https://github.com/HMBSbige/UpdateChecker</PackageProjectUrl>
       <PackageTags>UpdateChecker</PackageTags>
       <Version>5.0.1</Version>
-      <Copyright>Copyright © HMBSbige 2020</Copyright>
+      <Copyright>Copyright © 2020 - 2021 HMBSbige</Copyright>
       <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
       <PackageId>HMBSbige.UpdateChecker</PackageId>
       <PackageLicenseExpression>MIT</PackageLicenseExpression>
