@@ -27,7 +27,7 @@ namespace UpdateChecker
 		private readonly Func<string, string> _tagToVersion;
 		private readonly IComparer<object> _versionComparer;
 
-		private const string DefaultUserAgent = @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36";
+		private const string DefaultUserAgent = @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36";
 
 		public GitHubReleasesUpdateChecker(
 			string owner, string repo,

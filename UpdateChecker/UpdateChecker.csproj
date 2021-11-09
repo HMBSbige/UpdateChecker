@@ -1,25 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <Import Project="..\common.props" />
 
   <PropertyGroup>
-      <TargetFrameworks>net5.0;netcoreapp3.1;netstandard2.0</TargetFrameworks>
-      <LangVersion>latest</LangVersion>
-      <Nullable>enable</Nullable>
-      <Authors>HMBSbige</Authors>
-      <Description>Check for .NET app updates.</Description>
-      <RepositoryUrl>https://github.com/HMBSbige/UpdateChecker</RepositoryUrl>
-      <PackageProjectUrl>https://github.com/HMBSbige/UpdateChecker</PackageProjectUrl>
-      <PackageTags>UpdateChecker</PackageTags>
-      <Version>5.0.1</Version>
-      <Copyright>Copyright © 2020 - 2021 HMBSbige</Copyright>
-      <NoWarn>CS1591</NoWarn>
-      <GenerateDocumentationFile>true</GenerateDocumentationFile>
-      <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-      <PackageId>HMBSbige.UpdateChecker</PackageId>
-      <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <Description>Check for .NET app updates.</Description>
+    <PackageId>HMBSbige.UpdateChecker</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="5.0.2" Condition=" '$(TargetFramework)' == 'netstandard2.0' " />
+    <PackageReference Include="System.Text.Json" Version="6.0.0" Condition=" '$(TargetFramework)' == 'netstandard2.0' " />
   </ItemGroup>
 
 </Project>
