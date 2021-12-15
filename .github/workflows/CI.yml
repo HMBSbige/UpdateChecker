@@ -56,7 +56,7 @@ jobs:
 
       - name: Build
         shell: pwsh
-        run: dotnet build -c Release
+        run: dotnet build -c Release ${{ matrix.ProjectName }}\${{ matrix.ProjectName }}.csproj
 
       - name: Push nuget packages
         shell: pwsh
