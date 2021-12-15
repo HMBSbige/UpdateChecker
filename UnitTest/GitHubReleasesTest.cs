@@ -10,7 +10,7 @@ public class GitHubReleasesTest
 	[TestMethod]
 	public async Task VersionNotFoundTest()
 	{
-		var updaterChecker = new GitHubReleasesUpdateChecker(
+		GitHubReleasesUpdateChecker updaterChecker = new(
 			@"TCPingInfoView",
 			@"TCPingInfoView-Classic",
 			false,
@@ -26,7 +26,7 @@ public class GitHubReleasesTest
 	[TestMethod]
 	public async Task PreReleaseTestFailed()
 	{
-		var updaterChecker = new GitHubReleasesUpdateChecker(
+		GitHubReleasesUpdateChecker updaterChecker = new(
 			@"TCPingInfoView",
 			@"TCPingInfoView-Classic",
 			true,
@@ -40,7 +40,7 @@ public class GitHubReleasesTest
 	[TestMethod]
 	public async Task PreReleaseTestSuccess()
 	{
-		var updaterChecker = new GitHubReleasesUpdateChecker(
+		GitHubReleasesUpdateChecker updaterChecker = new(
 			@"TCPingInfoView",
 			@"TCPingInfoView-Classic",
 			true,
@@ -54,7 +54,7 @@ public class GitHubReleasesTest
 	[TestMethod]
 	public async Task ReleaseTestFailed()
 	{
-		var updaterChecker = new GitHubReleasesUpdateChecker(
+		GitHubReleasesUpdateChecker updaterChecker = new(
 			@"TCPingInfoView",
 			@"TCPingInfoView-Classic",
 			false,
@@ -68,7 +68,7 @@ public class GitHubReleasesTest
 	[TestMethod]
 	public async Task ReleaseTestSuccess()
 	{
-		var updaterChecker = new GitHubReleasesUpdateChecker(
+		GitHubReleasesUpdateChecker updaterChecker = new(
 			@"TCPingInfoView",
 			@"TCPingInfoView-Classic",
 			false,
