@@ -2,7 +2,6 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-
   test:
     name: Test
     runs-on: ${{ matrix.os }}
@@ -11,64 +10,65 @@ jobs:
         os: [ubuntu-latest, windows-latest]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Setup .NET 6.0
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
+      - name: Setup .NET 6.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
 
-    - name: Setup .NET 5.0
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.x
+      - name: Setup .NET Core 3.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
 
-    - name: Setup .NET Core 3.1
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.x
-
-    - name: Test .NET 4.6.1
-      if: startsWith(matrix.os, 'windows-')
-      shell: pwsh
-      run: dotnet test --logger:"console;verbosity=detailed" -c Release -f net461
-
-    - name: Test .NET Core 3.1
-      shell: pwsh
-      run: dotnet test --logger:"console;verbosity=detailed" -c Release -f netcoreapp3.1
-
-    - name: Test .NET 5.0
-      shell: pwsh
-      run: dotnet test --logger:"console;verbosity=detailed" -c Release -f net5.0
-
-    - name: Test .NET 6.0
-      shell: pwsh
-      run: dotnet test --logger:"console;verbosity=detailed" -c Release -f net6.0
+      - name: Test
+        shell: pwsh
+        run: dotnet test --logger:"console;verbosity=detailed" -c Release
 
   build:
     name: Push nuget packages if a new tag is pushed
     needs: test
     if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
     runs-on: ubuntu-latest
-    env:
-      ProjectName: UpdateChecker
+    strategy:
+      matrix:
+        ProjectName: [UpdateChecker]
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
 
-    - name: Build
-      shell: pwsh
-      run: dotnet build -c Release
+      - name: Build
+        shell: pwsh
+        run: dotnet build -c Release
 
-    - name: Push nuget packages
-      shell: pwsh
-      run: |
-        dotnet nuget push ${{ env.ProjectName }}\bin\Release\*.nupkg -s https://nuget.pkg.github.com/HMBSbige -k ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
-        dotnet nuget push ${{ env.ProjectName }}\bin\Release\*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NuGetAPIKey }} --skip-duplicate
+      - name: Push nuget packages
+        shell: pwsh
+        run: |
+          dotnet nuget push ${{ matrix.ProjectName }}\bin\Release\*.nupkg -s https://nuget.pkg.github.com/HMBSbige -k ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+          dotnet nuget push ${{ matrix.ProjectName }}\bin\Release\*.nupkg -s https://api.nuget.org/v3/index.json -k ${{ secrets.NuGetAPIKey }} --skip-duplicate
+
+  release:
+    name: Release
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Changelog
+        uses: glennawatson/ChangeLog@v1
+        id: changelog
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          body: ${{ steps.changelog.outputs.commitLog }}
+          draft: false
+          prerelease: false
