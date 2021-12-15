@@ -23,9 +23,18 @@ jobs:
         with:
           dotnet-version: 3.1.x
 
-      - name: Test
+      - name: Test .NET 4.6.2
+        if: startsWith(matrix.os, 'windows-')
         shell: pwsh
-        run: dotnet test --logger:"console;verbosity=detailed" -c Release
+        run: dotnet test --logger:"console;verbosity=detailed" -c Release -f net462
+
+      - name: Test .NET Core 3.1
+        shell: pwsh
+        run: dotnet test --logger:"console;verbosity=detailed" -c Release -f netcoreapp3.1
+
+      - name: Test .NET 6.0
+        shell: pwsh
+        run: dotnet test --logger:"console;verbosity=detailed" -c Release -f net6.0
 
   build:
     name: Push nuget packages if a new tag is pushed
