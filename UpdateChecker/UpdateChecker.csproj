@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\common.props" />
 
@@ -7,8 +7,8 @@
     <PackageId>HMBSbige.UpdateChecker</PackageId>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="6.0.0" Condition=" '$(TargetFramework)' == 'netstandard2.0' " />
+  <ItemGroup Condition=" $(TargetFramework.StartsWith('netstandard')) ">
+    <PackageReference Include="System.Text.Json" Version="6.0.1" />
   </ItemGroup>
 
 </Project>
