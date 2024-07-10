@@ -14,49 +14,54 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os:
+          - windows-latest
+          - ubuntu-latest
+          - macos-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
+            8.0.x
             6.0.x
-            3.1.x
 
       - name: Test .NET 4.6.2
         if: startsWith(matrix.os, 'windows-')
         shell: pwsh
         run: dotnet test --logger:"console;verbosity=detailed" -c Release -f net462
 
-      - name: Test .NET Core 3.1
-        shell: pwsh
-        run: dotnet test --logger:"console;verbosity=detailed" -c Release -f netcoreapp3.1
-
       - name: Test .NET 6.0
         shell: pwsh
         run: dotnet test --logger:"console;verbosity=detailed" -c Release -f net6.0
+
+      - name: Test .NET 8.0
+        shell: pwsh
+        run: dotnet test --logger:"console;verbosity=detailed" -c Release -f net8.0
 
   build:
     name: Push nuget packages if a new tag is pushed
     needs: test
     if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     strategy:
       matrix:
         ProjectName: [UpdateChecker]
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v2
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 8.0.x
 
       - name: Build
         shell: pwsh
@@ -74,14 +79,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Changelog
-        uses: glennawatson/ChangeLog@v1
-        id: changelog
-
       - name: Create Release
         uses: ncipollo/release-action@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          body: ${{ steps.changelog.outputs.commitLog }}
           draft: false
           prerelease: false
