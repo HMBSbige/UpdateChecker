@@ -12,6 +12,8 @@ jobs:
   test:
     name: Test
     runs-on: ${{ matrix.os }}
+    env:
+      DOTNET_CLI_TELEMETRY_OPTOUT: true
     strategy:
       fail-fast: false
       matrix:
