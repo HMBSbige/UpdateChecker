@@ -17,10 +17,7 @@ public class GitHubReleasesTest
 			@"1.6.0",
 			tag => tag.Replace(@"v", string.Empty)
 		);
-		await Assert.ThrowsExceptionAsync<VersionNotFoundException>(async () =>
-		{
-			Assert.IsFalse(await updaterChecker.CheckAsync(default));
-		});
+		await Assert.ThrowsExceptionAsync<VersionNotFoundException>(async () => Assert.IsFalse(await updaterChecker.CheckAsync()));
 	}
 
 	[TestMethod]
@@ -33,7 +30,7 @@ public class GitHubReleasesTest
 			@"1.6.0",
 			tag => tag.Replace(@"v", string.Empty)
 		);
-		Assert.IsFalse(await updaterChecker.CheckAsync(default));
+		Assert.IsFalse(await updaterChecker.CheckAsync());
 		Assert.IsNull(updaterChecker.LatestRelease);
 	}
 
@@ -47,7 +44,7 @@ public class GitHubReleasesTest
 			@"1.5.9",
 			tag => tag.Replace(@"v", string.Empty)
 		);
-		Assert.IsTrue(await updaterChecker.CheckAsync(default));
+		Assert.IsTrue(await updaterChecker.CheckAsync());
 		Assert.IsNotNull(updaterChecker.LatestRelease);
 	}
 
@@ -61,7 +58,7 @@ public class GitHubReleasesTest
 			@"1.6.0",
 			tag => tag.Replace(@"v", string.Empty).Replace(@"-steam", string.Empty)
 		);
-		Assert.IsFalse(await updaterChecker.CheckAsync(default));
+		Assert.IsFalse(await updaterChecker.CheckAsync());
 		Assert.IsNull(updaterChecker.LatestRelease);
 	}
 
@@ -75,7 +72,7 @@ public class GitHubReleasesTest
 			@"1.5.9",
 			tag => tag.Replace(@"v", string.Empty).Replace(@"-steam", string.Empty)
 		);
-		Assert.IsTrue(await updaterChecker.CheckAsync(default));
+		Assert.IsTrue(await updaterChecker.CheckAsync());
 		Assert.IsNotNull(updaterChecker.LatestRelease);
 	}
 }
