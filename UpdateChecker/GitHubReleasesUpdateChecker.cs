@@ -47,12 +47,6 @@ public class GitHubReleasesUpdateChecker : IUpdateChecker
 		HttpClient client = new();
 		client.DefaultRequestHeaders.Add(@"User-Agent", UserAgent);
 
-		string? token = Environment.GetEnvironmentVariable(@"GITHUB_TOKEN");
-		if (string.IsNullOrWhiteSpace(token))
-		{
-			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(@"Bearer", token);
-		}
-
 		return await CheckAsync(client, cancellationToken);
 	}
 
