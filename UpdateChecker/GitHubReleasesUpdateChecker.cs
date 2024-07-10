@@ -1,4 +1,5 @@
 using System.Data;
+using System.Net.Http.Headers;
 using UpdateChecker.Interfaces;
 using UpdateChecker.Models.GitHub;
 using UpdateChecker.Utils;
@@ -22,7 +23,7 @@ public class GitHubReleasesUpdateChecker : IUpdateChecker
 	private readonly Func<string, string> _tagToVersion;
 	private readonly IComparer<object> _versionComparer;
 
-	private const string DefaultUserAgent = @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
+	public string UserAgent { get; set; } = @"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36";
 
 	public GitHubReleasesUpdateChecker(
 		string owner, string repo,
@@ -41,16 +42,23 @@ public class GitHubReleasesUpdateChecker : IUpdateChecker
 		_versionComparer = versionComparer ?? new DefaultVersionComparer();
 	}
 
-	public async ValueTask<bool> CheckAsync(CancellationToken token)
+	public async ValueTask<bool> CheckAsync(CancellationToken cancellationToken = default)
 	{
-		using HttpClient client = new();
-		client.DefaultRequestHeaders.Add(@"User-Agent", DefaultUserAgent);
-		return await CheckAsync(client, token);
+		HttpClient client = new();
+		client.DefaultRequestHeaders.Add(@"User-Agent", UserAgent);
+
+		string? token = Environment.GetEnvironmentVariable(@"GITHUB_TOKEN");
+		if (string.IsNullOrWhiteSpace(token))
+		{
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(@"Bearer", token);
+		}
+
+		return await CheckAsync(client, cancellationToken);
 	}
 
-	public async ValueTask<bool> CheckAsync(HttpClient client, CancellationToken token)
+	public async ValueTask<bool> CheckAsync(HttpClient client, CancellationToken cancellationToken = default)
 	{
-		IEnumerable<GitHubRelease>? releases = await client.GetJsonAsync<IEnumerable<GitHubRelease>>(AllReleaseUrl, token);
+		IEnumerable<GitHubRelease>? releases = await client.GetJsonAsync<IEnumerable<GitHubRelease>>(AllReleaseUrl, cancellationToken);
 		GitHubRelease? latestRelease = releases?.GetLatestRelease(IsPreRelease, _tagToVersion, _versionComparer);
 		if (latestRelease?.tag_name is null)
 		{

@@ -8,12 +8,17 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+
 jobs:
   test:
     name: Test
     runs-on: ${{ matrix.os }}
     env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: true
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     strategy:
       fail-fast: false
       matrix:
