@@ -1,78 +1,77 @@
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Data;
-using UpdateChecker;
-
 namespace UnitTest;
 
 [TestClass]
 public class GitHubReleasesTest
 {
+	public TestContext TestContext { get; set; }
+
 	[TestMethod]
 	public async Task VersionNotFoundTest()
 	{
-		GitHubReleasesUpdateChecker updaterChecker = new(
+		GitHubReleasesUpdateChecker updaterChecker = new
+		(
 			@"TCPingInfoView",
 			@"TCPingInfoView-Classic",
 			false,
 			@"1.6.0",
 			tag => tag.Replace(@"v", string.Empty)
 		);
-		await Assert.ThrowsExceptionAsync<VersionNotFoundException>(async () => Assert.IsFalse(await updaterChecker.CheckAsync()));
+		await Assert.ThrowsExactlyAsync<VersionNotFoundException>(async () => Assert.IsFalse(await updaterChecker.CheckAsync(TestContext.CancellationToken)));
 	}
 
 	[TestMethod]
 	public async Task PreReleaseTestFailed()
 	{
-		GitHubReleasesUpdateChecker updaterChecker = new(
+		GitHubReleasesUpdateChecker updaterChecker = new
+		(
 			@"TCPingInfoView",
 			@"TCPingInfoView-Classic",
 			true,
 			@"1.6.0",
 			tag => tag.Replace(@"v", string.Empty)
 		);
-		Assert.IsFalse(await updaterChecker.CheckAsync());
-		Assert.IsNull(updaterChecker.LatestRelease);
+		Assert.IsFalse(await updaterChecker.CheckAsync(TestContext.CancellationToken));
 	}
 
 	[TestMethod]
 	public async Task PreReleaseTestSuccess()
 	{
-		GitHubReleasesUpdateChecker updaterChecker = new(
+		GitHubReleasesUpdateChecker updaterChecker = new
+		(
 			@"TCPingInfoView",
 			@"TCPingInfoView-Classic",
 			true,
 			@"1.5.9",
 			tag => tag.Replace(@"v", string.Empty)
 		);
-		Assert.IsTrue(await updaterChecker.CheckAsync());
-		Assert.IsNotNull(updaterChecker.LatestRelease);
+		Assert.IsTrue(await updaterChecker.CheckAsync(TestContext.CancellationToken));
 	}
 
 	[TestMethod]
 	public async Task ReleaseTestFailed()
 	{
-		GitHubReleasesUpdateChecker updaterChecker = new(
+		GitHubReleasesUpdateChecker updaterChecker = new
+		(
 			@"TCPingInfoView",
 			@"TCPingInfoView-Classic",
 			false,
 			@"1.6.0",
 			tag => tag.Replace(@"v", string.Empty).Replace(@"-steam", string.Empty)
 		);
-		Assert.IsFalse(await updaterChecker.CheckAsync());
-		Assert.IsNull(updaterChecker.LatestRelease);
+		Assert.IsFalse(await updaterChecker.CheckAsync(TestContext.CancellationToken));
 	}
 
 	[TestMethod]
 	public async Task ReleaseTestSuccess()
 	{
-		GitHubReleasesUpdateChecker updaterChecker = new(
+		GitHubReleasesUpdateChecker updaterChecker = new
+		(
 			@"TCPingInfoView",
 			@"TCPingInfoView-Classic",
 			false,
 			@"1.5.9",
 			tag => tag.Replace(@"v", string.Empty).Replace(@"-steam", string.Empty)
 		);
-		Assert.IsTrue(await updaterChecker.CheckAsync());
-		Assert.IsNotNull(updaterChecker.LatestRelease);
+		Assert.IsTrue(await updaterChecker.CheckAsync(TestContext.CancellationToken));
 	}
 }

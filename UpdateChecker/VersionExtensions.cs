@@ -1,8 +1,6 @@
-using UpdateChecker.Models.GitHub;
+namespace UpdateChecker;
 
-namespace UpdateChecker.Utils;
-
-public static class VersionExtensions
+internal static class VersionExtensions
 {
 	public static GitHubRelease? GetLatestRelease(
 		this IEnumerable<GitHubRelease> releases,
@@ -12,13 +10,13 @@ public static class VersionExtensions
 	{
 		if (!isPreRelease)
 		{
-			releases = releases.Where(release => !release.prerelease);
+			releases = releases.Where(release => !release.IsPreRelease);
 		}
 
 		IOrderedEnumerable<GitHubRelease> ordered = releases
-			.Where(release => release.tag_name is not null)
-			.Where(release => tagToVersion(release.tag_name!).IsVersionString())
-			.OrderByDescending(release => tagToVersion(release.tag_name!), versionComparer);
+			.Where(release => release.TagName is not null)
+			.Where(release => tagToVersion(release.TagName!).IsVersionString())
+			.OrderByDescending(release => tagToVersion(release.TagName!), versionComparer);
 		return ordered.FirstOrDefault();
 	}
 

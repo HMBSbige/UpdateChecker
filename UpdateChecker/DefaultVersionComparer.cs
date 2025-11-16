@@ -1,6 +1,4 @@
-using UpdateChecker.Utils;
-
-namespace UpdateChecker.VersionComparers;
+namespace UpdateChecker;
 
 public class DefaultVersionComparer : IComparer<object>
 {
