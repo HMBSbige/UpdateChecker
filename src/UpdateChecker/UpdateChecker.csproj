@@ -2,8 +2,13 @@
 
   <PropertyGroup>
     <IsPackable>true</IsPackable>
+    <IsAotCompatible>true</IsAotCompatible>
     <Description>Check for .NET app updates.</Description>
     <PackageId>HMBSbige.UpdateChecker</PackageId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MinVer" PrivateAssets="All" />
+  </ItemGroup>
 
 </Project>

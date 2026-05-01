@@ -8,33 +8,38 @@ NuGet.org | [![NuGet.org](https://img.shields.io/nuget/v/HMBSbige.UpdateChecker.
 # Usage
 ## GitHub Releases
 ```csharp
-var updaterChecker = new GitHubReleasesUpdateChecker(
-		@"TCPingInfoView", // Owner
-		@"TCPingInfoView-Classic", // Repo
-		false, // Is pre-release
-		@"1.6.0", // Current app version string
-		tag => tag.Replace(@"v", string.Empty), // Tag to version string
-		new DefaultVersionComparer() // Version comparer
-);
+GitHubReleasesUpdateCheckerOptions options = new()
+{
+	Owner = @"microsoft",
+	Repo = @"PowerToys",
+	IsPreRelease = false,
+	CurrentVersion = @"0.80.0",
+	VersionScheme = new DefaultVersionScheme()
+};
+
+GitHubReleasesUpdateChecker updateChecker = new(options);
 try
 {
-	var res = await updaterChecker.CheckAsync(default);
-	//var res = await updaterChecker.CheckAsync(new HttpClient(), new CancellationToken());
-	if (res)
+	bool result = await updateChecker.CheckAsync(default);
+	// bool result = await updateChecker.CheckAsync(new HttpClient(), new CancellationToken());
+	if (result)
 	{
 		// Update Found
 
-		var latestVersion = updaterChecker.LatestVersion;
-		var latestVersionUrl = updaterChecker.LatestVersionUrl;
-		var assetsUrl = updaterChecker.LatestRelease.assets.Select(asset => asset.browser_download_url);
+		string? latestVersion = updateChecker.LatestVersion;
+		string? latestVersionUrl = updateChecker.LatestVersionUrl;
 	}
 	else
 	{
 		// No newer version was found
 	}
 }
-catch (Exception ex)
+catch (UpdateCheckException)
 {
-	// Network exception or cannot find any correct tag.
+	// Cannot find any correct tag, or current version is invalid.
+}
+catch (Exception)
+{
+	// Network, JSON, cancellation, or other unexpected exception.
 }
 ```

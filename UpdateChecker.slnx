@@ -1,13 +1,24 @@
-﻿<Solution>
-  <Folder Name="/SolutionItems/">
+<Solution>
+  <Folder Name="/CI/">
+    <File Path=".github/workflows/CI.yml" />
+    <File Path=".github/workflows/release.yml" />
+  </Folder>
+  <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
+    <File Path=".github/renovate.json" />
     <File Path=".gitignore" />
     <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
     <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
     <File Path="LICENSE" />
     <File Path="NuGet.Config" />
     <File Path="README.md" />
   </Folder>
-  <Project Path="UnitTest/UnitTest.csproj" />
-  <Project Path="UpdateChecker/UpdateChecker.csproj" />
+  <Folder Name="/src/">
+    <Project Path="src/UpdateChecker/UpdateChecker.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/UpdateChecker.Tests/UpdateChecker.Tests.csproj" />
+  </Folder>
 </Solution>
