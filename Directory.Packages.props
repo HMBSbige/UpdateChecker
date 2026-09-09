@@ -4,6 +4,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="MinVer" Version="7.0.0" />
-    <PackageVersion Include="TUnit" Version="1.58.0" />
+    <PackageVersion Include="TUnit" Version="1.66.27" />
   </ItemGroup>
 </Project>
